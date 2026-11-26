@@ -49,7 +49,10 @@ def audit(line):
         broken.append(f"placard is {len(line)} characters, over {CHAR_LIMIT}")
     if "\n" in line or "\r" in line:
         broken.append("placard must be a single line")
-    if line.count(".") != 1:
+    # One sentence: exactly one full stop outside the "c." abbreviation
+    # in the date, and the line must end with it.
+    sentence_stops = line.replace("c.", "c").count(".")
+    if sentence_stops != 1 or not line.endswith("."):
         broken.append("placard must be a single sentence")
     return broken
 
